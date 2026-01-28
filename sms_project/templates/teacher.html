@@ -1,2 +1,17 @@
-<h1>Teacher Dashboard</h1>
-<a href="/logout">Logout</a>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+</head>
+<body>
+    <h1>Welcome Teacher</h1>
+
+    <ul>
+        <li><a href="#">Add Assignment</a></li>
+        <li><a href="#">View Students</a></li>
+    </ul>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

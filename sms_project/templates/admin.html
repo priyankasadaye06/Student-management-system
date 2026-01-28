@@ -1,2 +1,21 @@
-<h1>Admin Dashboard</h1>
-<a href="/logout">Logout</a>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Welcome Admin</h1>
+
+    <ul>
+        <li><a href="#">Add User</a></li>
+        <li><a href="#">View Users</a></li>
+    </ul>
+    <ul>
+    <li><a href="{{ url_for('add_user') }}">Add User</a></li>
+    </ul>
+
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

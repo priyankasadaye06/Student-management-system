@@ -24,7 +24,7 @@ def login():
         conn.close()
 
         if user:
-            session['user_id'] = user['id']
+            session['user_id'] = user['user_id']
             session['role'] = user['role']
 
             if user['role'] == 'admin':
@@ -52,6 +52,33 @@ def admin_dashboard():
     if 'role' in session and session['role'] == 'admin':
         return render_template('admin.html')
     return redirect(url_for('login'))
+
+@app.route('/admin/add-user', methods=['GET', 'POST'])
+def add_user():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        role = request.form['role']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "INSERT INTO `user` (name, email, password, role) VALUES (%s, %s, %s, %s)",
+            (name, email, password, role)
+        )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('add_user.html')
 
 
 # ---------------- TEACHER DASHBOARD ----------------
