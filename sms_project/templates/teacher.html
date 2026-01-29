@@ -5,13 +5,14 @@
     <title>Teacher Dashboard</title>
 </head>
 <body>
-    <h1>Welcome Teacher</h1>
+<h1>Welcome Teacher</h1>
 
-    <ul>
-        <li><a href="#">Add Assignment</a></li>
-        <li><a href="#">View Students</a></li>
-    </ul>
+<ul>
+    <li><a href="{{ url_for('add_assignment') }}">Add Assignment</a></li>
+    <li><a href="{{ url_for('view_students') }}">View Students</a></li>
+</ul>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
+<br>
+<a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

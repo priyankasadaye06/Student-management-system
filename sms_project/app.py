@@ -129,13 +129,69 @@ def assign_student():
 
 
 
+
 # ---------------- TEACHER DASHBOARD ----------------
 @app.route('/teacher')
 def teacher_dashboard():
-    if 'role' in session and session['role'] == 'teacher':
-        return render_template('teacher.html')
-    return redirect(url_for('login'))
+    if 'role' not in session or session['role'] != 'teacher':
+        return redirect(url_for('login'))
 
+    return render_template('teacher.html')
+
+
+# ---------------- ADD ASSIGNMENT ----------------
+@app.route('/teacher/add-assignment', methods=['GET', 'POST'])
+def add_assignment():
+    if 'role' not in session or session['role'] != 'teacher':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get all classes
+    cursor.execute("SELECT * FROM classes")
+    classes = cursor.fetchall()
+
+    if request.method == 'POST':
+        class_id = request.form['class_id']
+        title = request.form['title']
+        description = request.form['description']
+        due_date = request.form['due_date']
+
+        cursor.execute(
+            "INSERT INTO assignment (class_id, title, description, due_date) VALUES (%s, %s, %s, %s)",
+            (class_id, title, description, due_date)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for('teacher_dashboard'))
+
+    cursor.close()
+    conn.close()
+    return render_template('add_assignment.html', classes=classes)
+
+
+# ---------------- VIEW STUDENTS ----------------
+@app.route('/teacher/view-students')
+def view_students():
+    if 'role' not in session or session['role'] != 'teacher':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT s.student_id, u.name AS student_name, s.roll_no, c.class_name, c.section
+        FROM student s
+        JOIN user u ON s.user_id = u.user_id
+        JOIN classes c ON s.class_id = c.class_id
+    """)
+    students = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('view_students.html', students=students)
 
 # ---------------- STUDENT DASHBOARD ----------------
 @app.route('/student')
