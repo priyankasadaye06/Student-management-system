@@ -185,7 +185,7 @@ def add_assignment():
 
         filename = None
         if file and file.filename.endswith('.pdf'):
-    filename = file.filename
+            filename = file.filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         cursor.execute(
