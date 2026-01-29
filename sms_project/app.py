@@ -100,3 +100,76 @@ def student_dashboard():
 if __name__ == '__main__':
     app.run(debug=True)
 
+
+
+# ---------------- ADD USER ----------------
+@app.route('/admin/add-user', methods=['GET', 'POST'])
+def add_user():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        role = request.form['role']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO user (name, email, password, role) VALUES (%s, %s, %s, %s)",
+            (name, email, password, role)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('add_user.html')
+
+
+# ---------------- ASSIGN STUDENT ----------------
+@app.route('/assign-student', methods=['GET', 'POST'])
+def assign_student():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get users who are students and not yet assigned
+    cursor.execute("""
+        SELECT user_id, name 
+        FROM user 
+        WHERE role = 'student'
+        AND user_id NOT IN (SELECT user_id FROM student)
+    """)
+    students = cursor.fetchall()
+
+    # Get all classes
+    cursor.execute("SELECT * FROM classes")
+    classes = cursor.fetchall()
+
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        roll_no = request.form['roll_no']
+        class_id = request.form['class_id']
+
+        cursor.execute(
+            "INSERT INTO student (user_id, roll_no, class_id) VALUES (%s, %s, %s)",
+            (user_id, roll_no, class_id)
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+        return redirect(url_for('admin_dashboard'))
+
+    cursor.close()
+    conn.close()
+    return render_template(
+        'assign_student.html',
+        students=students,
+        classes=classes
+    )
