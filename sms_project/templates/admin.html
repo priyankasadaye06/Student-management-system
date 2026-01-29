@@ -1,20 +1,14 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Admin Dashboard</title>
-</head>
+<head><title>Admin Dashboard</title></head>
 <body>
-    <h1>Welcome Admin</h1>
-
-    
-    <ul>
+<h1>Welcome Admin</h1>
+<ul>
     <li><a href="{{ url_for('add_user') }}">Add User</a></li>
     <li><a href="{{ url_for('assign_student') }}">Assign Student to Class</a></li>
-
-    </ul>
-
-
-    <a href="{{ url_for('logout') }}">Logout</a>
+</ul>
+<a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>
+

@@ -1,40 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Assign Student</title>
-</head>
-<body>
 <h2>Assign Student to Class</h2>
-
-<form method="post">
+<form method="POST">
     <label>Student:</label>
     <select name="user_id" required>
         {% for student in students %}
-        <option value="{{ student.user_id }}">
-            {{ student.name }}
-        </option>
+        <option value="{{ student.user_id }}">{{ student.name }}</option>
         {% endfor %}
-    </select>
-    <br><br>
+    </select><br><br>
 
     <label>Roll No:</label>
-    <input type="text" name="roll_no" required>
-    <br><br>
+    <input type="text" name="roll_no" required><br><br>
 
     <label>Class:</label>
     <select name="class_id" required>
         {% for cls in classes %}
-        <option value="{{ cls.class_id }}">
-            {{ cls.class_name }} - {{ cls.section }}
-        </option>
+        <option value="{{ cls.class_id }}">{{ cls.class_name }} - {{ cls.section }}</option>
         {% endfor %}
-    </select>
-    <br><br>
+    </select><br><br>
 
     <button type="submit">Assign</button>
 </form>
-
-<br>
 <a href="{{ url_for('admin_dashboard') }}">Back</a>
-</body>
-</html>

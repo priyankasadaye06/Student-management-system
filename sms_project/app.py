@@ -81,32 +81,9 @@ def add_user():
     return render_template('add_user.html')
 
 
-# ---------------- TEACHER DASHBOARD ----------------
-@app.route('/teacher')
-def teacher_dashboard():
-    if 'role' in session and session['role'] == 'teacher':
-        return render_template('teacher.html')
-    return redirect(url_for('login'))
 
 
-# ---------------- STUDENT DASHBOARD ----------------
-@app.route('/student')
-def student_dashboard():
-    if 'role' in session and session['role'] == 'student':
-        return render_template('student.html')
-    return redirect(url_for('login'))
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
-# ---------------- ADD USER ----------------
-
-
-# ---------------- ASSIGN STUDENT ----------------
-@app.route('/assign-student', methods=['GET', 'POST'])
+@app.route('/admin/assign-student', methods=['GET', 'POST'])
 def assign_student():
     if 'role' not in session or session['role'] != 'admin':
         return redirect(url_for('login'))
@@ -149,3 +126,27 @@ def assign_student():
         students=students,
         classes=classes
     )
+
+
+
+# ---------------- TEACHER DASHBOARD ----------------
+@app.route('/teacher')
+def teacher_dashboard():
+    if 'role' in session and session['role'] == 'teacher':
+        return render_template('teacher.html')
+    return redirect(url_for('login'))
+
+
+# ---------------- STUDENT DASHBOARD ----------------
+@app.route('/student')
+def student_dashboard():
+    if 'role' in session and session['role'] == 'student':
+        return render_template('student.html')
+    return redirect(url_for('login'))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+

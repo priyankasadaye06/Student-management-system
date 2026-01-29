@@ -1,33 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add User</title>
-</head>
-<body>
-    <h2>Add New User (Admin)</h2>
-
-    <form method="POST">
-        <label>Name:</label><br>
-        <input type="text" name="name" required><br><br>
-
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
-
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
-
-        <label>Role:</label><br>
-        <select name="role" required>
-            <option value="">--Select Role--</option>
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-            <option value="admin">Admin</option>
-        </select><br><br>
-
-        <button type="submit">Add User</button>
-    </form>
-
-    <br>
-    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
-</body>
-</html>
+<h2>Add New User (Admin)</h2>
+<form method="POST">
+    <input type="text" name="name" placeholder="Name" required><br><br>
+    <input type="email" name="email" placeholder="Email" required><br><br>
+    <input type="password" name="password" placeholder="Password" required><br><br>
+    <select name="role" required>
+        <option value="">--Select Role--</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+        <option value="admin">Admin</option>
+    </select><br><br>
+    <button type="submit">Add User</button>
+</form>
+<a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
