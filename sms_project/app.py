@@ -1,8 +1,33 @@
+from datetime import date
+import os
+from werkzeug.utils import secure_filename
+
+
 from flask import Flask, render_template, request, redirect, session, url_for
 from db import get_db_connection
 
 app = Flask(__name__)
+UPLOAD_FOLDER = 'static/assignments'
+ALLOWED_EXTENSIONS = {'pdf'}
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'assignments')
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
 app.secret_key = "secret_key_123"   # required for session
+
+
+
+
+# for avoid file not found error
+os.makedirs('static/assignments', exist_ok=True)
+os.makedirs('static/submissions', exist_ok=True)
+
+
 
 # ---------------- LOGIN ----------------
 @app.route('/', methods=['GET', 'POST'])
@@ -148,7 +173,6 @@ def add_assignment():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Get all classes
     cursor.execute("SELECT * FROM classes")
     classes = cursor.fetchall()
 
@@ -157,12 +181,22 @@ def add_assignment():
         title = request.form['title']
         description = request.form['description']
         due_date = request.form['due_date']
+        file = request.files['assignment_file']
+
+        filename = None
+        if file and file.filename.endswith('.pdf'):
+    filename = file.filename
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         cursor.execute(
-            "INSERT INTO assignment (class_id, title, description, due_date) VALUES (%s, %s, %s, %s)",
-            (class_id, title, description, due_date)
+            """
+            INSERT INTO assignment (class_id, title, description, due_date, file_path)
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (class_id, title, description, due_date, filename)
         )
         conn.commit()
+
         cursor.close()
         conn.close()
         return redirect(url_for('teacher_dashboard'))
@@ -170,6 +204,11 @@ def add_assignment():
     cursor.close()
     conn.close()
     return render_template('add_assignment.html', classes=classes)
+
+# ----------helper function --------------
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 # ---------------- VIEW STUDENTS ----------------
@@ -194,11 +233,100 @@ def view_students():
     return render_template('view_students.html', students=students)
 
 # ---------------- STUDENT DASHBOARD ----------------
+
+# ----------------- Submission -------------------
+
+@app.route('/student/submit/<int:assignment_id>', methods=['GET', 'POST'])
+def submit_assignment(assignment_id):
+    if 'role' not in session or session['role'] != 'student':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get student_id
+    cursor.execute("""
+        SELECT student_id FROM student WHERE user_id = %s
+    """, (session['user_id'],))
+    student = cursor.fetchone()
+
+    if not student:
+        cursor.close()
+        conn.close()
+        return "Student record not found"
+
+    student_id = student['student_id']
+
+    if request.method == 'POST':
+        file = request.files['submission_file']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join('static/submissions', filename))
+
+        cursor.execute("""
+            INSERT INTO submission
+            (assignment_id, student_id, submitted_on, file_path)
+            VALUES (%s, %s, %s, %s)
+        """, (assignment_id, student_id, date.today(), filename))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return redirect(url_for('student_dashboard'))
+
+    cursor.close()
+    conn.close()
+    return render_template('submit_assignment.html')
+
+
+
+# ----------------VIEW ASSIGNMENT ---------------s
+
+
 @app.route('/student')
 def student_dashboard():
-    if 'role' in session and session['role'] == 'student':
-        return render_template('student.html')
-    return redirect(url_for('login'))
+    if 'role' not in session or session['role'] != 'student':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get student_id and class_id
+    cursor.execute("""
+        SELECT student_id, class_id
+        FROM student
+        WHERE user_id = %s
+    """, (session['user_id'],))
+    student = cursor.fetchone()
+
+    if not student:
+        cursor.close()
+        conn.close()
+        return "Student not assigned to any class"
+
+    student_id = student['student_id']
+    class_id = student['class_id']
+
+    # Get assignments + submission status
+    cursor.execute("""
+        SELECT 
+            a.assignment_id,
+            a.title,
+            a.description,
+            a.due_date,
+            a.file_path,
+            s.submission_id
+        FROM assignment a
+        LEFT JOIN submission s
+        ON a.assignment_id = s.assignment_id
+        AND s.student_id = %s
+        WHERE a.class_id = %s
+    """, (student_id, class_id))
+
+    assignments = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('student.html', assignments=assignments)
 
 
 if __name__ == '__main__':

@@ -4,14 +4,58 @@
     <title>Student Dashboard</title>
 </head>
 <body>
-    <h1>Welcome Student</h1>
 
-    <ul>
-        <li><a href="#">View Assignments</a></li>
-        <li><a href="#">View Notices</a></li>
-    </ul>
+<h1>Student Dashboard</h1>
+<h2>Your Assignments</h2>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
+{% if assignments %}
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Assignment</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for a in assignments %}
+    <tr>
+        <td>{{ a.title }}</td>
+        <td>{{ a.description }}</td>
+        <td>{{ a.due_date }}</td>
+        <td>
+            <a href="{{ url_for('static', filename='assignments/' ~ a.file_path) }}" download>
+                Download PDF
+            </a>
+        </td>
+        <td>
+            {% if a.submission_id %}
+                Submitted ✅
+            {% else %}
+                Not Submitted ❌
+            {% endif %}
+        </td>
+        <td>
+            {% if not a.submission_id %}
+            <a href="{{ url_for('submit_assignment', assignment_id=a.assignment_id) }}">
+                Submit
+            </a>
+            {% else %}
+            —
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No assignments available.</p>
+{% endif %}
+
+<br>
+<a href="{{ url_for('logout') }}">Logout</a>
+
 </body>
 </html>
+
 
