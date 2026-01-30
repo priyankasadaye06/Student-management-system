@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Class</title>
+</head>
+<body>
+
+<h2>Create Class</h2>
+
+<form method="POST">
+    <label>Class Name:</label><br>
+    <input type="text" name="class_name" placeholder="FE / SE / TE / BE" required><br><br>
+
+    <label>Section:</label><br>
+    <input type="text" name="section" placeholder="AIML / CSE / CS / MECH / ELEC / ECS / MECTRO" required><br><br>
+
+    <button type="submit">Create Class</button>
+</form>
+
+<br>
+<a href="{{ url_for('admin_dashboard') }}">Back</a>
+
+</body>
+</html>

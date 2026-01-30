@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Event</title>
+</head>
+<body>
+
+<h2>Add Event / Seminar / Competition</h2>
+
+<form method="POST">
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description" required></textarea><br><br>
+
+    <label>Event Date:</label><br>
+    <input type="date" name="event_date" required><br><br>
+
+    <button type="submit">Add Event</button>
+</form>
+
+<br>
+<a href="{{ url_for('admin_dashboard') }}">Back</a>
+
+</body>
+</html>

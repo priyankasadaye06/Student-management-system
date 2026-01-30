@@ -78,6 +78,46 @@ def admin_dashboard():
         return render_template('admin.html')
     return redirect(url_for('login'))
 
+
+# --------NOTICE AND EVENTS -------------
+
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # total students
+    cursor.execute("SELECT COUNT(*) AS total_students FROM user WHERE role='student'")
+    total_students = cursor.fetchone()['total_students']
+
+    # total teachers
+    cursor.execute("SELECT COUNT(*) AS total_teachers FROM user WHERE role='teacher'")
+    total_teachers = cursor.fetchone()['total_teachers']
+
+    # recent notices
+    cursor.execute(
+        "SELECT * FROM notices ORDER BY posted_on DESC LIMIT 5"
+    )
+    notices = cursor.fetchall()
+
+    # upcoming events
+    cursor.execute(
+        "SELECT * FROM events ORDER BY event_date ASC LIMIT 5"
+    )
+    events = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        'admin.html',
+        total_students=total_students,
+        total_teachers=total_teachers,
+        notices=notices,
+        events=events
+    )
+
 @app.route('/admin/add-user', methods=['GET', 'POST'])
 def add_user():
     if 'role' not in session or session['role'] != 'admin':
@@ -151,6 +191,99 @@ def assign_student():
         students=students,
         classes=classes
     )
+
+
+
+@app.route('/admin/add-class', methods=['GET', 'POST'])
+def add_class():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        class_name = request.form['class_name']
+        section = request.form['section']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "INSERT INTO classes (class_name, section) VALUES (%s, %s)",
+            (class_name, section)
+        )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('add_class.html')
+
+
+# ------notice ------
+
+@app.route('/admin/add-notice', methods=['GET', 'POST'])
+def add_notice():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        title = request.form['title']
+        message = request.form['message']
+        posted_by = 'admin'
+        posted_on = date.today()
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO notices (title, message, posted_by, posted_on)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (title, message, posted_by, posted_on)
+        )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('add_notice.html')
+
+
+# -------------- Event ------------
+
+@app.route('/admin/add-event', methods=['GET', 'POST'])
+def add_event():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        event_date = request.form['event_date']
+        posted_on = date.today()
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO events (title, description, event_date, posted_on)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (title, description, event_date, posted_on)
+        )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('add_event.html')
 
 
 
