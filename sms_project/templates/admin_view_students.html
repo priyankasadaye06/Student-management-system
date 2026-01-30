@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Students (Class-wise)</title>
+</head>
+<body>
+
+<h2>Students by Class</h2>
+
+{% for cls in class_students %}
+    <h3>Class: {{ cls.class_name }} - {{ cls.section }}</h3>
+
+    {% if cls.students %}
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+
+            {% for student in cls.students %}
+            <tr>
+                <td>{{ student.roll_no }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.email }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No students in this class.</p>
+    {% endif %}
+
+    <br>
+{% endfor %}
+
+<a href="{{ url_for('admin_dashboard') }}">⬅ Back to Admin Dashboard</a>
+
+</body>
+</html>

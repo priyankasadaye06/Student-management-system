@@ -74,10 +74,9 @@ def logout():
 # ---------------- ADMIN DASHBOARD ----------------
 @app.route('/admin')
 def admin_dashboard():
-    if 'role' in session and session['role'] == 'admin':
-        return render_template('admin.html')
-    return redirect(url_for('login'))
-
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))   
+    
 
 # --------NOTICE AND EVENTS -------------
 
@@ -106,6 +105,11 @@ def admin_dashboard():
         "SELECT * FROM events ORDER BY event_date ASC LIMIT 5"
     )
     events = cursor.fetchall()
+
+
+    # 👇 DEBUG PRINTS
+    print("NOTICES:", notices)
+    print("EVENTS:", events)
 
     cursor.close()
     conn.close()
@@ -286,6 +290,65 @@ def add_event():
     return render_template('add_event.html')
 
 
+# ------------------ VIEW STUDENTS --------------------
+
+@app.route('/admin/view-students')
+def admin_view_students():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Get all classes
+    cursor.execute("SELECT * FROM classes")
+    classes = cursor.fetchall()
+
+    class_students = []
+
+    for cls in classes:
+        cursor.execute("""
+            SELECT u.name, u.email, s.roll_no
+            FROM student s
+            JOIN user u ON s.user_id = u.user_id
+            WHERE s.class_id = %s
+        """, (cls['class_id'],))
+
+        students = cursor.fetchall()
+
+        class_students.append({
+            'class_name': cls['class_name'],
+            'section': cls['section'],
+            'students': students
+        })
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        'admin_view_students.html',
+        class_students=class_students
+    )
+
+
+# --------------------- VIEW TEACHER ------------------
+
+
+@app.route('/admin/teachers')
+def view_teachers():
+    if 'role' not in session or session['role'] != 'admin':
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT name, email FROM user WHERE role='teacher'")
+    teachers = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('view_teachers.html', teachers=teachers)
 
 
 # ---------------- TEACHER DASHBOARD ----------------
@@ -346,24 +409,43 @@ def allowed_file(filename):
 
 # ---------------- VIEW STUDENTS ----------------
 @app.route('/teacher/view-students')
-def view_students():
+def teacher_view_students():
     if 'role' not in session or session['role'] != 'teacher':
         return redirect(url_for('login'))
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("""
-        SELECT s.student_id, u.name AS student_name, s.roll_no, c.class_name, c.section
-        FROM student s
-        JOIN user u ON s.user_id = u.user_id
-        JOIN classes c ON s.class_id = c.class_id
-    """)
-    students = cursor.fetchall()
+    # get all classes
+    cursor.execute("SELECT * FROM classes")
+    classes = cursor.fetchall()
+
+    class_students = []
+
+    for cls in classes:
+        cursor.execute("""
+            SELECT u.name, u.email, s.roll_no
+            FROM student s
+            JOIN user u ON s.user_id = u.user_id
+            WHERE s.class_id = %s
+        """, (cls['class_id'],))
+
+        students = cursor.fetchall()
+
+        class_students.append({
+            'class_name': cls['class_name'],
+            'section': cls['section'],
+            'students': students
+        })
+
     cursor.close()
     conn.close()
 
-    return render_template('view_students.html', students=students)
+    return render_template(
+        'teacher_view_students.html',
+        class_students=class_students
+    )
+
 
 # ---------------- STUDENT DASHBOARD ----------------
 

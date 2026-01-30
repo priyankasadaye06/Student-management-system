@@ -4,6 +4,20 @@
 <head><title>Admin Dashboard</title></head>
 <body>
 <h1>Welcome Admin</h1>
+<h2>Dashboard Overview</h2>
+
+<div style="display:flex; gap:40px;">
+    <div>
+        <h3>Total Students</h3>
+        <p>{{ total_students }}</p>
+    </div>
+
+    <div>
+        <h3>Total Teachers</h3>
+        <p>{{ total_teachers }}</p>
+    </div>
+</div>
+
 <ul>
     <li><a href="{{ url_for('add_user') }}">Add User</a></li>
     <li><a href="{{ url_for('add_class') }}">Create Class</a></li>
@@ -11,6 +25,13 @@
     <li><a href="{{ url_for('add_notice') }}">Post Notice</a></li>
     <li><a href="{{ url_for('add_event') }}">Add Event / Reminder</a></li>
 </ul>
+
+<h2>Manage Users</h2>
+<ul>
+    <li><a href="{{ url_for('admin_view_students') }}">View Students</a></li>
+    <li><a href="{{ url_for('view_teachers') }}">View Teachers</a></li>
+</ul>
+
 
 <hr>
 
