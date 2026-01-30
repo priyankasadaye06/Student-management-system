@@ -52,22 +52,38 @@
 <p>No assignments available.</p>
 {% endif %}
 
+
+<h2>Recent Notices</h2>
+
+{% if notices %}
+    {% for notice in notices %}
+        <div>
+            <strong>{{ notice.title }}</strong><br>
+            {{ notice.message }}<br>
+            <small>Posted on: {{ notice.posted_on }}</small>
+        </div>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No notices available</p>
+{% endif %}
+
 <h2>Upcoming Events</h2>
 
 {% if events %}
-    <ul>
-        {% for event in events %}
-        <li>
+    {% for event in events %}
+        <div>
             <strong>{{ event.title }}</strong><br>
             {{ event.description }}<br>
             <small>Date: {{ event.event_date }}</small>
-        </li>
-        <br>
-        {% endfor %}
-    </ul>
+        </div>
+        <hr>
+    {% endfor %}
 {% else %}
-    <p>No upcoming events.</p>
+    <p>No events available</p>
 {% endif %}
+
+
 
 <br>
 <a href="{{ url_for('logout') }}">Logout</a>

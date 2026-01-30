@@ -20,6 +20,38 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.secret_key = "secret_key_123"   # required for session
 
+# ------helper funtion for events and notices ---------
+
+def get_notices(limit=5):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        "SELECT * FROM notices ORDER BY posted_on DESC LIMIT %s",
+        (limit,)
+    )
+    notices = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return notices
+
+
+def get_events(limit=5):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        "SELECT * FROM events ORDER BY event_date ASC LIMIT %s",
+        (limit,)
+    )
+    events = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    return events
+
+
 
 
 
@@ -95,25 +127,27 @@ def admin_dashboard():
     total_teachers = cursor.fetchone()['total_teachers']
 
     # recent notices
-    cursor.execute(
-        "SELECT * FROM notices ORDER BY posted_on DESC LIMIT 5"
-    )
-    notices = cursor.fetchall()
+    #cursor.execute(
+       # "SELECT * FROM notices ORDER BY posted_on DESC LIMIT 5"
+    #)
+    #notices = cursor.fetchall()
 
     # upcoming events
-    cursor.execute(
-        "SELECT * FROM events ORDER BY event_date ASC LIMIT 5"
-    )
-    events = cursor.fetchall()
+    #cursor.execute(
+        #"SELECT * FROM events ORDER BY event_date ASC LIMIT 5"
+    #)
+    #events = cursor.fetchall()
 
 
     # 👇 DEBUG PRINTS
-    print("NOTICES:", notices)
-    print("EVENTS:", events)
+    #print("NOTICES:", notices)
+    #print("EVENTS:", events)
 
     cursor.close()
     conn.close()
 
+    notices = get_notices()
+    events = get_events()
     return render_template(
         'admin.html',
         total_students=total_students,
@@ -357,7 +391,15 @@ def teacher_dashboard():
     if 'role' not in session or session['role'] != 'teacher':
         return redirect(url_for('login'))
 
-    return render_template('teacher.html')
+    notices = get_notices()
+    events = get_events()
+
+    return render_template(
+        'teacher.html',
+        notices=notices,
+        events=events
+    )
+    #return render_template('teacher.html')
 
 
 # ---------------- ADD ASSIGNMENT ----------------
@@ -502,10 +544,14 @@ def student_dashboard():
     if 'role' not in session or session['role'] != 'student':
         return redirect(url_for('login'))
 
+    # --- Notices & Events (helper functions) ---
+    notices = get_notices()
+    events = get_events()
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Get student_id and class_id
+    # --- Get student_id and class_id ---
     cursor.execute("""
         SELECT student_id, class_id
         FROM student
@@ -521,7 +567,7 @@ def student_dashboard():
     student_id = student['student_id']
     class_id = student['class_id']
 
-    # Get assignments + submission status
+    # --- Get assignments + submission status ---
     cursor.execute("""
         SELECT 
             a.assignment_id,
@@ -538,11 +584,18 @@ def student_dashboard():
     """, (student_id, class_id))
 
     assignments = cursor.fetchall()
+
     cursor.close()
     conn.close()
 
-    return render_template('student.html', assignments=assignments)
+    return render_template(
+        'student.html',
+        notices=notices,
+        events=events,
+        assignments=assignments
+    )
 
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
