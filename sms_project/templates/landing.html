@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+
+    <!-- CSS link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <header class="navbar">
+        <div class="logo">Student Management System</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="#features">Features</a>
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        </nav>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero">
+        <h1>Welcome to Student Management System</h1>
+        <p>Manage students, teachers, notices and events efficiently.</p>
+        <a href="{{ url_for('login') }}" class="btn">Get Started</a>
+    </section>
+
+    <!-- ===== FEATURES SECTION ===== -->
+    <section class="features" id="features">
+        <h2>System Features</h2>
+
+        <div class="feature-box">
+            <div class="card">
+                <h3>Admin Panel</h3>
+                <p>Manage students, teachers and system data.</p>
+            </div>
+
+            <div class="card">
+                <h3>Teacher Module</h3>
+                <p>Post notices, assignments and view students.</p>
+            </div>
+
+            <div class="card">
+                <h3>Student View</h3>
+                <p>View notices, events and assignments.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section class="about">
+        <h2>About the Project</h2>
+        <p>
+            This web-based Student Management System helps educational institutes
+            manage academic activities digitally using a simple and secure interface.
+        </p>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>© 2026 Student Management System</p>
+    </footer>
+
+</body>
+</html>

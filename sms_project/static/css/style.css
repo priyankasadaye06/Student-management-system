@@ -1,0 +1,362 @@
+/* ===== GENERAL ===== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.login-btn {
+    background-color: #2563eb;
+    padding: 8px 14px;
+    border-radius: 4px;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: white;
+}
+
+.hero h1 {
+    font-size: 36px;
+    color: #1e3a8a;
+}
+
+.hero p {
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.btn {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* ===== FEATURES ===== */
+.features {
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.feature-box {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    width: 25%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* ===== ABOUT ===== */
+.about {
+    background-color: white;
+    padding: 50px 40px;
+    text-align: center;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background-color: #1e3a8a;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+
+
+
+
+
+
+/* ===== LOGIN PAGE STYLE ===== */
+
+.login-body {
+    margin: 0;
+    height: 100vh;
+    background-color: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 35px;
+    width: 320px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1e3a8a;
+}
+
+.login-box label {
+    font-size: 14px;
+    color: #333;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.login-box input:focus {
+    outline: none;
+    border-color: #1e3a8a;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #2563eb;
+}
+
+
+
+
+
+
+/* ===== ADMIN DASHBOARD ===== */
+
+.admin-body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #e0f2fe, #f8fafc);
+}
+
+.dashboard-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+.dashboard-container h1 {
+    color: #1e3a8a;
+}
+
+.sub-heading {
+    margin-bottom: 25px;
+    color: #334155;
+}
+
+/* STATS CARDS */
+.stats {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: white;
+    padding: 25px;
+    flex: 1;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.card h3 {
+    color: #475569;
+}
+
+.card p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1e3a8a;
+}
+
+/* SECTIONS */
+.section {
+    background-color: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.section h2 {
+    color: #1e3a8a;
+    margin-bottom: 15px;
+}
+
+/* LINKS */
+.action-links {
+    list-style: none;
+    padding: 0;
+}
+
+.action-links li {
+    margin-bottom: 10px;
+}
+
+.action-links a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.action-links a:hover {
+    text-decoration: underline;
+}
+
+/* LIST BOX (NOTICES & EVENTS) */
+.list-box {
+    list-style: none;
+    padding: 0;
+}
+
+.list-box li {
+    background-color: #f1f5f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+
+/* LOGOUT */
+.logout-btn {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #dc2626;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.logout-btn:hover {
+    background-color: #b91c1c;
+}
+
+
+
+/* ===== TEACHER DASHBOARD ===== */
+
+.teacher-body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ecfeff, #f8fafc);
+}
+
+/* reuse dashboard-container, section, action-links, list-box, logout-btn */
+/* no need to rewrite them again */
+
+
+
+
+
+
+/* ===== STUDENT DASHBOARD ===== */
+
+.student-body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #f0fdf4, #f8fafc);
+}
+
+/* TABLE STYLE */
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.dashboard-table th {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.dashboard-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dashboard-table tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+.dashboard-table a {
+    color: #2563eb;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.dashboard-table a:hover {
+    text-decoration: underline;
+}
+
+/* STATUS */
+.status {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.submitted {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.not-submitted {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* ACTION BUTTON */
+.action-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.action-btn:hover {
+    background-color: #1e40af;
+}

@@ -20,6 +20,22 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.secret_key = "secret_key_123"   # required for session
 
+
+
+
+# --------Landing Page----------
+@app.route('/')
+def landing():
+    return render_template('landing.html')
+
+# Login Page
+#@app.route('/login')
+#def user_login():
+   # return render_template('login.html')
+
+#if __name__ == '__main__':
+   # app.run(debug=True)
+
 # ------helper funtion for events and notices ---------
 
 def get_notices(limit=5):
@@ -62,7 +78,7 @@ os.makedirs('static/submissions', exist_ok=True)
 
 
 # ---------------- LOGIN ----------------
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']

@@ -1,71 +1,86 @@
-
 <!DOCTYPE html>
 <html>
-<head><title>Admin Dashboard</title></head>
-<body>
-<h1>Welcome Admin</h1>
-<h2>Dashboard Overview</h2>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
 
-<div style="display:flex; gap:40px;">
-    <div>
-        <h3>Total Students</h3>
-        <p>{{ total_students }}</p>
+<body class="admin-body">
+
+<div class="dashboard-container">
+
+    <h1>Welcome Admin</h1>
+    <h2 class="sub-heading">Dashboard Overview</h2>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="card">
+            <h3>Total Students</h3>
+            <p>{{ total_students }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Teachers</h3>
+            <p>{{ total_teachers }}</p>
+        </div>
     </div>
 
-    <div>
-        <h3>Total Teachers</h3>
-        <p>{{ total_teachers }}</p>
+    <!-- ACTION LINKS -->
+    <div class="section">
+        <h2>Quick Actions</h2>
+        <ul class="action-links">
+            <li><a href="{{ url_for('add_user') }}">Add User</a></li>
+            <li><a href="{{ url_for('add_class') }}">Create Class</a></li>
+            <li><a href="{{ url_for('assign_student') }}">Assign Student to Class</a></li>
+            <li><a href="{{ url_for('add_notice') }}">Post Notice</a></li>
+            <li><a href="{{ url_for('add_event') }}">Add Event / Reminder</a></li>
+        </ul>
     </div>
+
+    <!-- MANAGE USERS -->
+    <div class="section">
+        <h2>Manage Users</h2>
+        <ul class="action-links">
+            <li><a href="{{ url_for('admin_view_students') }}">View Students</a></li>
+            <li><a href="{{ url_for('view_teachers') }}">View Teachers</a></li>
+        </ul>
+    </div>
+
+    <!-- NOTICES -->
+    <div class="section">
+        <h2>Recent Notices</h2>
+        <ul class="list-box">
+            {% for notice in notices %}
+                <li>
+                    <b>{{ notice.title }}</b><br>
+                    {{ notice.message }}<br>
+                    <small>Posted by {{ notice.posted_by }} on {{ notice.posted_on }}</small>
+                </li>
+            {% else %}
+                <li>No notices posted</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="section">
+        <h2>Upcoming Events</h2>
+        <ul class="list-box">
+            {% for event in events %}
+                <li>
+                    <b>{{ event.title }}</b> ({{ event.event_date }})<br>
+                    {{ event.description }}
+                </li>
+            {% else %}
+                <li>No upcoming events</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a class="logout-btn" href="{{ url_for('logout') }}">Logout</a>
+
 </div>
 
-<ul>
-    <li><a href="{{ url_for('add_user') }}">Add User</a></li>
-    <li><a href="{{ url_for('add_class') }}">Create Class</a></li>
-    <li><a href="{{ url_for('assign_student') }}">Assign Student to Class</a></li>
-    <li><a href="{{ url_for('add_notice') }}">Post Notice</a></li>
-    <li><a href="{{ url_for('add_event') }}">Add Event / Reminder</a></li>
-</ul>
-
-<h2>Manage Users</h2>
-<ul>
-    <li><a href="{{ url_for('admin_view_students') }}">View Students</a></li>
-    <li><a href="{{ url_for('view_teachers') }}">View Teachers</a></li>
-</ul>
-
-
-<hr>
-
-<h3>Recent Notices</h3>
-<ul>
-    {% for notice in notices %}
-        <li>
-            <b>{{ notice.title }}</b><br>
-            {{ notice.message }}<br>
-            <small>Posted by {{ notice.posted_by }} on {{ notice.posted_on }}</small>
-        </li>
-    {% else %}
-        <li>No notices posted</li>
-    {% endfor %}
-</ul>
-
-<hr>
-
-<h3>Upcoming Events / Seminars / Competitions</h3>
-<ul>
-    {% for event in events %}
-        <li>
-            <b>{{ event.title }}</b> ({{ event.event_date }})<br>
-            {{ event.description }}
-        </li>
-    {% else %}
-        <li>No upcoming events</li>
-    {% endfor %}
-</ul>
-
-<hr>
-
-
-<a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>
 
