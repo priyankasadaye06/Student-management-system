@@ -126,22 +126,7 @@ def admin_dashboard():
     cursor.execute("SELECT COUNT(*) AS total_teachers FROM user WHERE role='teacher'")
     total_teachers = cursor.fetchone()['total_teachers']
 
-    # recent notices
-    #cursor.execute(
-       # "SELECT * FROM notices ORDER BY posted_on DESC LIMIT 5"
-    #)
-    #notices = cursor.fetchall()
-
-    # upcoming events
-    #cursor.execute(
-        #"SELECT * FROM events ORDER BY event_date ASC LIMIT 5"
-    #)
-    #events = cursor.fetchall()
-
-
-    # 👇 DEBUG PRINTS
-    #print("NOTICES:", notices)
-    #print("EVENTS:", events)
+    
 
     cursor.close()
     conn.close()
